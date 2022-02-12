@@ -15,3 +15,12 @@ now encrypt it but still produce a link that can be viewed immediately.
 
 The security of course relies only on the fact that the key is not practically
 guessable. As soon as the (full) URL leaks, the security is gone.
+
+## Example
+
+* Create the HTML file you want to share.
+* Call `cryptml source/myfile.html target/myfile.html`
+* Note the printed key.
+* Upload `target/myfile.html` to the HTTP server of your choice.
+* Go to your browser and visit: `https://<yourserver>/myfile.html#<key>`
+  (replacing `<key>` with the one you noted earlier).
