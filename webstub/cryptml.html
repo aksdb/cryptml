@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Encrypted Document</title>
+</head>
+<body>
+    <script>
+        const fromHexString = hexString =>
+            new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+        async function init() {
+            const url = new URL(document.URL);
+            const key = fromHexString(url.hash.substring(1));
+
+            const payload = "{{PLACEHOLDER}}";
+            const payloadBytes = new Uint8Array(Array.from(atob(payload)).map(ch => ch.charCodeAt(0)));
+
+            const iv = payloadBytes.slice(0, 12);
+            const cipherText = payloadBytes.slice(12);
+
+            const algorithm = {name: 'AES-GCM', iv: iv}
+            const cryptoKey = await crypto.subtle.importKey('raw', key, algorithm, false, ['decrypt']);
+
+            try {
+
+                const plainBuffer = await crypto.subtle.decrypt(algorithm, cryptoKey, cipherText);
+                document.documentElement.innerHTML = new TextDecoder().decode(plainBuffer);
+            } catch (e) {
+                throw new Error(`Decrypt failed`);
+            }
+        }
+
+        init()
+    </script>
+</body>
+</html>
