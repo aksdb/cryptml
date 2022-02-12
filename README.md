@@ -16,6 +16,13 @@ now encrypt it but still produce a link that can be viewed immediately.
 The security of course relies only on the fact that the key is not practically
 guessable. As soon as the (full) URL leaks, the security is gone.
 
+## Build
+
+You need Go 1.17 or later to build this tool.
+
+If you have it, simply run `go build .` in the checked out repository
+or `go install .` to directly put it into your `$GOPATH/bin`.
+
 ## Example
 
 * Create the HTML file you want to share.
@@ -24,3 +31,14 @@ guessable. As soon as the (full) URL leaks, the security is gone.
 * Upload `target/myfile.html` to the HTTP server of your choice.
 * Go to your browser and visit: `https://<yourserver>/myfile.html#<key>`
   (replacing `<key>` with the one you noted earlier).
+
+## Upload directly to server
+
+Intended use case: the server in question allows uploads via WebDAV
+and serves the files via default HTTP.
+
+```
+cryptml myfile.html https://user:pass@example.com/dav/myfile.html
+```
+
+If the URL ends with `/`, the original filename is appended automatically.
